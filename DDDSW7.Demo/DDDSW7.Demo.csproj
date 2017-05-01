@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\"/>
+    <ProjectReference Include="..\Nancy.Siren\Nancy.Siren.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1"/>
+    <PackageReference Include="Nancy" Version="2.0.0-clinteastwood"/>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2"/>
+    <PackageReference Include="Nancy.Serialization.JsonNet" Version="2.0.0-clinteastwood"/>
+    <PackageReference Include="LiteDB" Version="3.1.0"/>
+  </ItemGroup>
+</Project>

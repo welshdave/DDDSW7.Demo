@@ -17,19 +17,7 @@ namespace DDDSW7.Demo.Infrastructure
             var sirenDoc = new Siren
             {
                 @class = new [] { "siteDetail" },
-                properties = data//,
-                //entities = new List<Entity>
-                //{
-                //    new Entity{
-                //        @class = new[] { "collection" },
-                //        rel = new[]
-                //        {
-                //            uri.Scheme + "://" + uri.DnsSafeHost + ":" +
-                //            (uri.Port != 80 ? uri.Port.ToString() : "") + "/rels/orders"
-                //        },
-                //        href = uri + "/orders"
-                //    }
-                //}
+                properties = data
             };
 
             sirenDoc.links = new List<Link>(){

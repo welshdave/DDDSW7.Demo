@@ -8,21 +8,29 @@ namespace DDDSW7.Demo.Model
     public class OrderRepository : IOrderRepository
     {
         string connectionString = @"Orders.db";
-        public bool AddItemsToOrder(Guid id, List<OrderItem> model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Order CreateNewOrder()
+        
+        public Order CreateNewOrder(List<OrderItem> model)
         {
             using(var db = new LiteRepository(connectionString))
             {
                 var newOrder = new Order
                 {
-                    OrderNumber = Guid.NewGuid()
+                    OrderNumber = Guid.NewGuid(),
+                    Status = "Pending",
+                    Items = model
                 };
-                db.Insert(newOrder);
+                db.Insert<Order>(newOrder);
                 return newOrder;
+            }
+        }
+        
+        public bool AddItemsToOrder(Guid id, List<OrderItem> model)
+        {
+            using(var db = new LiteRepository(connectionString))
+            {
+                var order = db.SingleOrDefault<Order>(x => x.OrderNumber == id);
+                order.Items.AddRange(model);
+                return db.Update<Order>(order);
             }
         }
 
@@ -58,10 +66,21 @@ namespace DDDSW7.Demo.Model
             {
                 ProductCode = item.ProductCode,
                 Quantity = item.Quantity,
-                ProductName = item.ProductName,
+                ProductName = $"Product {item.ProductCode}",
                 ProductUrl = "https://www.google.co.uk/search?q=" + item.ProductCode,
                 OrderNumber = id
             });
+        }
+
+        public bool ChangeStatus(Guid id, string status, string info)
+        {
+            using(var db = new LiteRepository(connectionString))
+            {
+                var order =  db.SingleOrDefault<Order>(x => x.OrderNumber == id);
+                order.Status = status;
+                order.Information += info;
+                return db.Update<Order>(order);
+            }
         }
     }
 }

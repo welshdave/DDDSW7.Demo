@@ -74,7 +74,7 @@ namespace DDDSW7.Demo.Infrastructure
                 actions = new List<Action>()
             };
 
-            if(data.Status != "Shipped") 
+            if(data.Status == "Pending") 
             {
                 sirenDoc.actions.Add(new Action
                         {
@@ -97,21 +97,40 @@ namespace DDDSW7.Demo.Infrastructure
                                     new Field {name = "quantity", type = "number"}
                                 })
                         });
+                sirenDoc.actions.Add(new Action
+                {
+                    name = "ship-order",
+                    title = "Ship Order",
+                    method = "POST",
+                    href = uri + "/ship",
+                    type = "application/json",
+                    fields = 
+                        new List<Field>(new[]
+                                {
+                                    new Field {name = "name", type = "text"},
+                                    new Field {name = "address", type = "text"}
+                                })
+                });
             }
-            else
+            else if (data.Status == "Shipped")
             {
                 sirenDoc.actions.Add(new Action
                 {
                     name = "request-return",
                     title = "Request Return Of Order",
                     method = "POST",
-                    href = uri.ToString() + "return",
+                    href = uri + "/return",
                     type = "application/json",
                     fields = new List<Field>(new []
                     {
                         new Field {name = "reason", type = "text"}
                     })
                 });
+            }
+
+            if(sirenDoc.actions.Count == 0)
+            {
+                sirenDoc.actions = null;
             }
 
             sirenDoc.links = new List<Link> (new [] { new Link { rel = new [] { "self" }, href = uri.ToString () } });

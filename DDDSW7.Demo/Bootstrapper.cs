@@ -22,14 +22,13 @@ namespace DDDSW7.Demo
             base.ConfigureApplicationContainer(container);
             container.Register<JsonSerializer, CustomJsonSerializer>();
 
-            container.Register<ISirenDocumentWriter<SiteDetail>, HomeWriter>(); 
+            container.Register<ISirenDocumentWriter<SiteDetail>, HomeWriter>();
             container.Register<ISirenDocumentWriter<Order>, OrderWriter>();
             container.Register<ISirenDocumentWriter<OrderItemViewModel>, OrderItemViewModelWriter>();
-            
+
 
             container.RegisterMultiple<ILinkGenerator>(new[] { typeof(HomeLinkGenerator), typeof(OrderItemLinkGenerator), typeof(OrderLinkGenerator) });
         }
-
         protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfiguration
         {
             get
@@ -42,6 +41,17 @@ namespace DDDSW7.Demo
 
                 return NancyInternalConfiguration.WithOverrides(x => x.ResponseProcessors = processors);
             }
+        }
+
+        protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
+        {
+            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) =>
+            {
+                ctx.Response.WithHeader("Access-Control-Allow-Origin", "*")
+                                .WithHeader("Access-Control-Allow-Methods", "POST,GET")
+                                .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
+
+            });
         }
     }
 }
